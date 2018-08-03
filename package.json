@@ -1,0 +1,54 @@
+{
+  "name": "redux-ts-actions",
+  "version": "0.0.0",
+  "description": "Type-safe FSA utilies for redux",
+  "main": "dist/commonjs/index.js",
+  "module": "dist/es/index.js",
+  "scripts": {
+    "commitmsg": "commitlint -E GIT_PARAMS",
+    "prebuild": "npm run test",
+    "build": "npm run build:commonjs && npm run build:es",
+    "build:commonjs": "tsc --outDir dist/commonjs --module ESNext",
+    "build:es": "tsc --outDir dist/es --module ESNext",
+    "clean": "rimraf dist",
+    "lint": "eslint --ext ts src/**/*",
+    "test": "jest",
+    "test:watch": "npm run test -- --watch",
+    "posttest": "npm run lint"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "transform": {
+      "\\.ts$": "ts-jest"
+    },
+    "testRegex": "\\.test\\.ts$",
+    "moduleFileExtensions": [
+      "ts",
+      "js"
+    ],
+    "globals": {
+      "ts-jest": {
+        "skipBabel": true
+      }
+    }
+  },
+  "keywords": [
+    "redux"
+  ],
+  "author": "Kenneth Powers <ken@kenpowers.net> (https://knpw.rs)",
+  "license": "MIT",
+  "devDependencies": {
+    "@commitlint/cli": "^7.0.0",
+    "@commitlint/config-conventional": "^7.0.1",
+    "@types/jest": "^23.3.1",
+    "eslint": "^4.19.1",
+    "eslint-config-airbnb-base": "^13.0.0",
+    "eslint-plugin-import": "^2.13.0",
+    "husky": "^0.14.3",
+    "jest": "^23.4.2",
+    "rimraf": "^2.6.2",
+    "ts-jest": "^23.1.2",
+    "typescript": "^3.0.1",
+    "typescript-eslint-parser": "^17.0.1"
+  }
+}
