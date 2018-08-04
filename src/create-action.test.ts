@@ -105,3 +105,7 @@ test('infers types and supports errors', () => {
     error,
   });
 });
+
+test('toString', () => {
+  expect(createAction('foo').toString()).toBe('foo');
+});
