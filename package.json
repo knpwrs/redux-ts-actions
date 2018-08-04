@@ -15,7 +15,8 @@
     "lint": "eslint --ext ts src/**/*",
     "test": "jest",
     "test:watch": "npm run test -- --watch",
-    "posttest": "npm run lint"
+    "posttest": "npm run lint",
+    "prepack": "npm run build"
   },
   "jest": {
     "testEnvironment": "node",
