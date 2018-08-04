@@ -5,7 +5,7 @@ import {
   reduceReducers,
 } from '.';
 
-test('all together (type handle)', () => {
+test('all together (generic)', () => {
   // Action Creators
   const setName = createAction('user/SET_NAME', (id: string, name: string) => ({ id, name }));
   const incrementFollowers = createAction<string>('user/INCREMENT_FOLLOWERS');
@@ -31,6 +31,49 @@ test('all together (type handle)', () => {
       },
     })),
     handleAction(incrementFollowers, (state, { payload }) => ({
+      ...state,
+      [payload!]: {
+        ...(state[payload!] || emptyUser),
+        followers: state[payload!].followers + 1,
+      },
+    })),
+  ], initialState);
+
+  // Use the reducer:
+  expect([setName('id-1', 'Ken'), incrementFollowers('id-1')].reduce(reducer, undefined)).toEqual({
+    'id-1': {
+      name: 'Ken',
+      followers: 1,
+    },
+  });
+});
+
+test('all together (infer)', () => {
+  // Action Creators
+  const setName = createAction('user/SET_NAME', (id: string, name: string) => ({ id, name }));
+  const incrementFollowers = createAction<string>('user/INCREMENT_FOLLOWERS');
+
+  // Users Reducer
+  interface User {
+    readonly name: string,
+    readonly followers: number,
+  }
+  interface State {
+    readonly [id: string]: User;
+  }
+
+  const initialState: State = {};
+  const emptyUser: User = { name: '', followers: 0 };
+
+  const reducer = reduceReducers([
+    handleAction(setName, (state: State, { payload }) => ({
+      ...state,
+      [payload!.id]: {
+        ...(state[payload!.id] || emptyUser),
+        name: payload!.name,
+      },
+    })),
+    handleAction(incrementFollowers, (state: State, { payload }) => ({
       ...state,
       [payload!]: {
         ...(state[payload!] || emptyUser),
