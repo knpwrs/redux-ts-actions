@@ -1,6 +1,6 @@
 {
   "name": "redux-ts-actions",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Type-safe FSA utilies for redux",
   "main": "dist/commonjs/index.js",
   "module": "dist/es/index.js",
