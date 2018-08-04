@@ -71,3 +71,37 @@ test('works with bindActionCreators from redux', () => {
   });
   acs.ac1();
 });
+
+test('infers types and supports errors', () => {
+  const error = new Error('The Error');
+  const ac1 = createAction('foo');
+  expect(ac1()).toEqual({
+    type: 'foo',
+  });
+  expect(ac1(error)).toEqual({
+    type: 'foo',
+    error,
+  });
+  const ac2 = createAction('bar', (str: string) => str.toUpperCase());
+  expect(ac2('baz')).toEqual({
+    type: 'bar',
+    payload: 'BAZ',
+  });
+  expect(ac2(error)).toEqual({
+    type: 'bar',
+    error,
+  });
+  const ac3 = createAction('baz', (str: string, flag?: boolean) => (flag ? str.toUpperCase() : str));
+  expect(ac3('foo', true)).toEqual({
+    type: 'baz',
+    payload: 'FOO',
+  });
+  expect(ac3('foo')).toEqual({
+    type: 'baz',
+    payload: 'foo',
+  });
+  expect(ac3(error)).toEqual({
+    type: 'baz',
+    error,
+  });
+});
