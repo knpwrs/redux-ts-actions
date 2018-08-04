@@ -1,5 +1,7 @@
 extends: airbnb-base
 parser: typescript-eslint-parser
+plugins:
+  - typescript
 settings:
   import/resolver:
     node:
@@ -9,6 +11,8 @@ settings:
     typescript-eslint-parser: [.ts]
 rules:
   no-undef: off
+  space-infix-ops: off
   import/extensions: [error, ignorePackages, {
     js: never,
   }]
+  typescript/no-unused-vars: error

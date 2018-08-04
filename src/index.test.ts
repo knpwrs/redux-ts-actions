@@ -1,5 +1,6 @@
-import mod from '.';
+import createAction from './create-action';
+import * as index from '.';
 
-test('exports a specific string', () => {
-  expect(mod).toBe('Hello, World!');
+test('interface', () => {
+  expect(index.createAction).toBe(createAction);
 });
