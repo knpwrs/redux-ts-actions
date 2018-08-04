@@ -4,6 +4,7 @@
   "description": "Type-safe FSA utilies for redux",
   "main": "dist/commonjs/index.js",
   "module": "dist/es/index.js",
+  "typings": "dist/es/index.d.ts",
   "scripts": {
     "commitmsg": "commitlint -E GIT_PARAMS",
     "prebuild": "npm run test",
