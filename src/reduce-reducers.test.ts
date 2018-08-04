@@ -27,3 +27,16 @@ test('all together (type reducer)', () => {
   const actions = [inc(), dec(), dec(), inc(), inc()];
   expect(actions.reduce(re, undefined)).toBe(1);
 });
+
+test('all together (type reducerReducers)', () => {
+  const inc = createAction('inc');
+  const dec = createAction('dec');
+  const add = createAction<number>('add');
+  const re = reduceReducers<number>([
+    handleAction(inc, i => i + 1),
+    handleAction(dec, i => i - 1),
+    handleAction(add, (i, { payload = 0 }) => i + payload),
+  ], 0);
+  const actions = [inc(), dec(), dec(), inc(), inc()];
+  expect(actions.reduce(re, undefined)).toBe(1);
+});
