@@ -105,8 +105,9 @@ createUser(new Error('Foo')); // { type: 'user/CREATE_USER', payload?: Error, er
 ### `handleAction`
 
 This function creates a type-safe reducer given an action creator and a reducer
-function. The state argument must be typed but the action argument will be
-inferred based on the action creator.
+function. The state argument must be typed (unless this is used in the context
+of `reduceReducers` documented below) but the action argument will be inferred
+based on the action creator.
 
 ```ts
 import { handleAction } from 'redux-ts-actions';
@@ -146,7 +147,8 @@ const reducer = handleAction(createUser, (state: State, { payload }) => {
 ### `reduceReducers`
 
 This function composes reducers together into a single reducer. It takes an
-array of reducer functions and an optional default state.
+array of reducer functions and an optional default state. If you specify a type
+then you don't need to specify state types for any child reducers.
 
 ```
 import { reduceReducers } from 'redux-ts-actions';
@@ -155,10 +157,12 @@ const increment = createAction('counter/INCREMENT');
 const decrement = createAction('counter/DECREMENT');
 const add = createAction<number>('counter/ADD');
 
-const reducer = reduceReducers([
-  handleAction(increment, (i: number) => i + 1),
-  handleAction(decrement, (i: number) => i - 1),
-  handleAction(add, (i: number, { payload = 0 }) => i + payload),
+// Passing a type to `reduceReducers` allows everything below to be typesafe:
+
+const reducer = reduceReducers<number>([
+  handleAction(inc, i => i + 1),
+  handleAction(dec, i => i - 1),
+  handleAction(add, (i, { payload = 0 }) => i + payload),
 ], 0);
 ```
 
