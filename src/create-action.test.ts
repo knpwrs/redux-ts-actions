@@ -17,6 +17,14 @@ test('creates flux standard actions with identity payload creator', () => {
   });
 });
 
+test('creates flux standard actions with untyped identity payload creator', () => {
+  const ac = createAction<string>('foo');
+  expect(ac('bar')).toEqual({
+    type: 'foo',
+    payload: 'bar',
+  });
+});
+
 test('create flux standard actions with explicit payload creator', () => {
   const ac = createAction<string, [number]>('foo', num => `${num}`);
   expect(ac(4)).toEqual({
