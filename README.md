@@ -153,10 +153,12 @@ import { reduceReducers } from 'redux-ts-actions';
 
 const increment = createAction('counter/INCREMENT');
 const decrement = createAction('counter/DECREMENT');
+const add = createAction<number>('counter/ADD');
 
 const reducer = reduceReducers([
   handleAction(increment, (i: number) => i + 1),
   handleAction(decrement, (i: number) => i - 1),
+  handleAction(add, (i: number, { payload = 0 }) => i + payload),
 ], 0);
 ```
 
