@@ -5,16 +5,18 @@ export interface FluxStandardAction<T> extends Action<string> {
   error?: Error;
 }
 
-export type FluxStandardActionCreator<T, A extends any[] = [any?]>
-  = ((...args: A) => FluxStandardAction<T>);
+export interface FluxStandardActionCreator<T, A extends any[] = [T?]> {
+  (...args: A): FluxStandardAction<T>;
+  (...error: [Error]): FluxStandardAction<T>;
+}
 
-export type PayloadCreator<P, A extends any[] = [any?]> = (...args: A) => P;
+export type PayloadCreator<P, A extends any[] = [P?]> = (...args: A) => P;
 const identity = <T>(arg: T): T => arg;
 
-export default <P, A extends any[] = [any?]>(
+export default <P, A extends any[] = [P?]>(
   type: string,
   pc: PayloadCreator<P, A> = identity,
-): FluxStandardActionCreator<P, A> => (...args: A): FluxStandardAction<P> => {
+): FluxStandardActionCreator<P, A> => (...args: any[]): FluxStandardAction<P> => {
   if (args[0] instanceof Error) {
     return {
       type,
@@ -23,6 +25,6 @@ export default <P, A extends any[] = [any?]>(
   }
   return {
     type,
-    payload: pc(...args),
+    payload: pc(...args as A),
   };
 };

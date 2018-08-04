@@ -41,6 +41,24 @@ test('create flux standard actions with explicit payload creator (many args)', (
   });
 });
 
+test('creates an error action when given an error', () => {
+  const ac = createAction<string>('foo');
+  const error = new Error('Foo Error');
+  expect(ac(error)).toEqual({
+    type: 'foo',
+    error,
+  });
+});
+
+test('creates an error action when given an error', () => {
+  const ac = createAction<string, [string]>('foo', str => str.toUpperCase());
+  const error = new Error('Foo Error');
+  expect(ac(error)).toEqual({
+    type: 'foo',
+    error,
+  });
+});
+
 test('works with bindActionCreators from redux', () => {
   const ac1 = createAction<string>('foo', () => 'baz');
   const ac2 = createAction<string, [string]>('bar', s => s);
