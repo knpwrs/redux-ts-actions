@@ -9,7 +9,7 @@
     "commitmsg": "commitlint -E GIT_PARAMS",
     "prebuild": "npm run test",
     "build": "npm run build:commonjs && npm run build:es",
-    "build:commonjs": "tsc --outDir dist/commonjs --module ESNext",
+    "build:commonjs": "tsc --outDir dist/commonjs --module commonjs",
     "build:es": "tsc --outDir dist/es --module ESNext",
     "clean": "rimraf dist",
     "lint": "eslint --ext ts src/**/*",
