@@ -58,6 +58,110 @@ const reducer = reduceReducers<State>([
 // Use the reducer:
 [setName('id-1', 'Ken'), incrementFollowers('id-1')].reduce(reducer, undefined);
 ```
+
+## API
+
+### `createAction`
+
+This function creates an action creator. It optionally accepts a payload
+customizer function. The payload type of the resulting action creator and the
+arguments the action creator accepts are inferred from the payload creator function.
+
+```ts
+import { createAction } from 'redux-ts-actions';
+
+interface User {
+  readonly name: string;
+  readonly followers: number;
+}
+
+// Fully-implicit typing
+const createUser = createAction('user/CREATE_USER', (name: string, followers: number) => ({ name, followers }));
+createUser('Ken', 15); // Compiles and returns an object with a known shape of { type: 'user/CREATE_USER', payload?: User }
+createUser('Ken', false); // Fails to compile. `boolean` is not assignable to `number`.
+
+// Identity typing
+const createUser = createAction<User>('user/CREATE_USER');
+createUser({ name: 'Ken', followers: 15 }); // Compiles and returns the same object as before
+createUser({ name: 'Ken', followers: false }); // Fails to compile. `boolean` is not assignable to `number`.
+
+// Fully-explicit typing
+const createUser = createAction<User, string, number>('user/CREATE_USER', (name, followers) => ({ name, followers }));
+createUser('Ken', 15); // Compiles and returns an object with a known shape of { type: 'user/CREATE_USER', payload?: { name, followers }}
+createUser('Ken', false); // Fails to compile. `boolean` is not assignable to `number`.
+
+// No Payload
+const increment = createAction('inc');
+increment(); // Creates an action with no payload
+
+// Error Handling
+// All of the above action creators can accept an Error as their only argument.
+// Payload customizers will not be called and the resulting actions will have
+// their `error` property set to `true` and their payload will be the error
+// object.
+createUser(new Error('Foo')); // { type: 'user/CREATE_USER', payload?: Error, error: true }
+```
+
+### `handleAction`
+
+This function creates a type-safe reducer given an action creator and a reducer
+function. The state argument must be typed but the action argument will be
+inferred based on the action creator.
+
+```ts
+import { handleAction } from 'redux-ts-actions';
+
+const reducer = handleAction(createUser, (state: State, action) => {
+  // action.payload is `User | undefined`
+});
+
+// Or
+
+const reducer = handleAction<State>(createUser, (state, action) => {
+  // action.payload is `User | undefined`
+});
+```
+
+#### A Note About [Flux Standard Actions][fsa]
+
+The `payload` property on [Flux Standard Actions][fsa] is optional. In
+TypeScript you can work with these actions in one of two ways:
+
+```ts
+const reducer = handleAction(createUser, (state: State, action) => {
+  // Method 1:
+  if (action.payload) {
+    action.payload.name;
+  }
+  // Method 2:
+  action.payload!.name;
+});
+
+// Method 2 also works with destructuring:
+const reducer = handleAction(createUser, (state: State, { payload }) => {
+  payload!.name;
+});
+```
+
+### `reduceReducers`
+
+This function composes reducers together into a single reducer. It takes an
+array of reducer functions and an optional default state.
+
+```
+import { reduceReducers } from 'redux-ts-actions';
+
+const increment = createAction('counter/INCREMENT');
+const decrement = createAction('counter/DECREMENT');
+
+const reducer = reduceReducers([
+  handleAction(increment, (i: number) => i + 1),
+  handleAction(decrement, (i: number) => i - 1),
+], 0);
+```
+
 ## License
 
 **MIT**
+
+[fsa]: https://github.com/redux-utilities/flux-standard-action "Flux Standard Action Spec"
