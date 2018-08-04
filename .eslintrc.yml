@@ -16,3 +16,7 @@ rules:
     js: never,
   }]
   typescript/no-unused-vars: error
+overrides:
+  - files: '**/*.test.ts'
+    rules:
+      import/no-extraneous-dependencies: off
