@@ -150,7 +150,7 @@ This function composes reducers together into a single reducer. It takes an
 array of reducer functions and an optional default state. If you specify a type
 then you don't need to specify state types for any child reducers.
 
-```
+```ts
 import { reduceReducers } from 'redux-ts-actions';
 
 const increment = createAction('counter/INCREMENT');
