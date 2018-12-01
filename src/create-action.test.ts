@@ -46,7 +46,8 @@ test('creates an error action when given an error', () => {
   const error = new Error('Foo Error');
   expect(ac(error)).toEqual({
     type: 'foo',
-    error,
+    error: true,
+    payload: error,
   });
 });
 
@@ -55,7 +56,8 @@ test('creates an error action when given an error', () => {
   const error = new Error('Foo Error');
   expect(ac(error)).toEqual({
     type: 'foo',
-    error,
+    error: true,
+    payload: error,
   });
 });
 
@@ -80,7 +82,8 @@ test('infers types and supports errors', () => {
   });
   expect(ac1(error)).toEqual({
     type: 'foo',
-    error,
+    error: true,
+    payload: error,
   });
   const ac2 = createAction('bar', (str: string) => str.toUpperCase());
   expect(ac2('baz')).toEqual({
@@ -89,7 +92,8 @@ test('infers types and supports errors', () => {
   });
   expect(ac2(error)).toEqual({
     type: 'bar',
-    error,
+    error: true,
+    payload: error,
   });
   const ac3 = createAction('baz', (str: string, flag?: boolean) => (flag ? str.toUpperCase() : str));
   expect(ac3('foo', true)).toEqual({
@@ -102,7 +106,8 @@ test('infers types and supports errors', () => {
   });
   expect(ac3(error)).toEqual({
     type: 'baz',
-    error,
+    error: true,
+    payload: error,
   });
 });
 

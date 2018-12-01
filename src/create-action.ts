@@ -1,8 +1,8 @@
 import { Action } from 'redux';
 
 export interface FluxStandardAction<T> extends Action<string> {
-  payload?: T;
-  error?: Error;
+  payload?: T | Error;
+  error?: true; // Always undefined or `true`
   toString(): string;
 }
 
@@ -23,7 +23,8 @@ export default <P, A extends any[] = [P?]>(
     if (args[0] instanceof Error) {
       return {
         type,
-        error: args[0],
+        error: true,
+        payload: args[0],
       };
     }
     return {
