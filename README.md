@@ -1,3 +1,5 @@
+# DEPRECATED IN FAVOR OF [`redux-ts-utils`][utils]. PLEASE USE THAT LIBRARY!
+
 # redux-ts-actions
 
 [![Dependency Status](https://img.shields.io/david/knpwrs/redux-ts-actions.svg)](https://david-dm.org/knpwrs/redux-ts-actions)
@@ -171,3 +173,4 @@ const reducer = reduceReducers<number>([
 **MIT**
 
 [fsa]: https://github.com/redux-utilities/flux-standard-action "Flux Standard Action Spec"
+[utils]: https://github.com/knpwrs/redux-ts-utils
